@@ -1,0 +1,105 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>TP3 DVC</title>
+<style>
+:root{--bg:#f7f8fb;--card:#fff;--ink:#1d2433;--muted:#5b6578;--line:#e3e7ef;
+--accent:#2f6fde;--accent-soft:#e8f0fd;--ok:#1f8a5b;--ok-soft:#e5f5ee;--warn:#b7791f;
+--warn-soft:#fdf3e1;--bad:#c2410c;--bad-soft:#fdebe3;--code:#f1f3f8;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11151d;--card:#1a202b;
+--ink:#e7ebf3;--muted:#9aa5b8;--line:#2b3342;--accent:#6ea0ff;--accent-soft:#1e2a44;--ok:#4cc38a;
+--ok-soft:#163027;--warn:#e0a84a;--warn-soft:#33281a;--bad:#f08a5d;--bad-soft:#3a2219;--code:#222a37;}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:32px 16px 64px}
+header.hero{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:28px}
+.kicker{color:var(--accent);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:13px}
+h1{font-size:clamp(26px,4vw,36px);line-height:1.2;margin:6px 0 10px}
+h2{font-size:22px;margin:40px 0 14px;padding-top:8px}
+h3{font-size:17px;margin:0 0 6px}
+p.lead{color:var(--muted);font-size:18px;margin:0}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card p{margin:4px 0 0;color:var(--muted);font-size:15px}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:12px 0}
+.step{flex:1 1 140px;background:var(--card);border:1px solid var(--line);border-top:4px solid var(--accent);
+border-radius:10px;padding:12px;min-width:130px}
+.step b{display:block;font-size:15px}.step span{color:var(--muted);font-size:13px}
+.arrow{align-self:center;color:var(--muted);font-size:22px}
+.callout{border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:8px;padding:12px 16px;margin:14px 0}
+.callout.ok{border-color:var(--ok);background:var(--ok-soft)}
+.callout.warn{border-color:var(--warn);background:var(--warn-soft)}
+.callout.bad{border-color:var(--bad);background:var(--bad-soft)}
+.callout strong{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);
+border-radius:10px;overflow:hidden;font-size:15px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--code);font-weight:600}td.n{text-align:right;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto}
+code{background:var(--code);padding:1px 6px;border-radius:5px;font:14px ui-monospace,Consolas,monospace}
+pre{background:var(--code);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;
+font:13.5px/1.5 ui-monospace,Consolas,monospace;margin:10px 0}
+ul.check{list-style:none;padding:0;margin:0}ul.check li{padding:8px 0 8px 30px;position:relative;border-bottom:1px dashed var(--line)}
+ul.check li:before{content:"\2713";position:absolute;left:4px;color:var(--ok);font-weight:700}
+.bar{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:14px}
+.bar .lbl{width:170px;flex:none;color:var(--muted)}
+.bar .track{flex:1;background:var(--code);border-radius:6px;height:20px;position:relative}
+.bar .fill{background:var(--accent);height:100%;border-radius:6px}
+.bar .fill.alt{background:var(--ok)}.bar .fill.bad{background:var(--bad)}
+.bar .val{width:70px;flex:none;text-align:right;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);
+font-size:13px;font-weight:600;margin:2px 4px 2px 0}
+nav.toc{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+nav.toc a{color:var(--accent);text-decoration:none;font-size:14px;border:1px solid var(--line);
+border-radius:999px;padding:3px 12px;background:var(--card)}
+footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:560px){.arrow{transform:rotate(90deg);width:100%;text-align:center}.bar .lbl{width:110px}}
+</style></head><body><main>
+<header class="hero"><div class="kicker">TP3 - DVC</div><h1>Versionner les donnees et rendre le pipeline reproductible</h1><p class="lead">Le maillon manquant du TP2 : savoir exactement quelles donnees ont produit quel modele.</p>
+<nav class="toc"><a href="#but">Le but</a><a href="#fait">Ce qu'on a fait</a><a href="#code">Le code</a><a href="#resultats">Resultats</a><a href="#lecons">Lecons</a><a href="#pieges">Pieges</a><a href="#commandes">Commandes</a></nav></header>
+
+<h2 id="but">Le but : versionner les DONNEES comme le code</h2>
+<p>Au TP2 il manquait un maillon : les donnees. Si <code>transactions.csv</code> change, impossible de
+retrouver la version qui a entraine le modele. <b>DVC</b> fait pour les donnees et les modeles ce que
+Git fait pour le code.</p>
+<div class="callout "><strong>L'image a retenir : le vestiaire</strong>Git garde le <b>ticket</b> (petit fichier <code>.dvc</code> avec l'empreinte md5), DVC garde le <b>manteau</b> (le gros fichier) dans son cache et son stockage.</div>
+
+<h2 id="fait">Ce qu'on a fait</h2>
+<h3>Ou vit chaque chose</h3>
+<div class="grid">
+<div class="card"><h3>Git / GitHub</h3><p>code, <code>params.yaml</code>, <code>dvc.yaml</code>, <code>dvc.lock</code>, tickets <code>*.dvc</code>, <code>metrics.json</code>, <code>.dvc/config</code></p></div>
+<div class="card"><h3>.dvc/cache (local)</h3><p>contenu reel rangé par md5 : <code>files/md5/cf/9f6f86...</code></p></div>
+<div class="card"><h3>dvc-stockage (remote)</h3><p>copie partagee : en entreprise S3, Azure Blob, GDrive...</p></div>
+<div class="card"><h3>MLflow</h3><p>runs avec tags <code>commit</code> + <code>donnees_md5</code> + <code>dvc.lock</code> en artefact</p></div>
+</div>
+<h3>Bloc A - Versionner, pousser, restaurer</h3>
+<div class="flow"><div class="step"><b>dvc init</b><span>.dvc/ + .dvcignore</span></div><div class="arrow">&rarr;</div><div class="step"><b>dvc add</b><span>ticket .dvc + data/.gitignore</span></div><div class="arrow">&rarr;</div><div class="step"><b>git commit</b><span>le ticket seulement</span></div><div class="arrow">&rarr;</div><div class="step"><b>dvc push</b><span>vers dvc-stockage</span></div><div class="arrow">&rarr;</div><div class="step"><b>perte + dvc pull</b><span>5000 lignes restaurees</span></div></div>
+<h3>Bloc B - Pipeline declaratif <code>dvc.yaml</code></h3>
+<div class="flow"><div class="step"><b>transactions.csv.dvc</b><span>entree</span></div><div class="arrow">&rarr;</div><div class="step"><b>preparer</b><span>deps + params preparation.*</span></div><div class="arrow">&rarr;</div><div class="step"><b>entrainer</b><span>params entrainement.*</span></div><div class="arrow">&rarr;</div><div class="step"><b>evaluer</b><span>metrics: cache false</span></div></div>
+<h3>Bloc C - v2 et voyage dans le temps</h3>
+<div class="flow"><div class="step"><b>v1</b><span>5000 lignes, F1 0.8636</span></div><div class="arrow">&rarr;</div><div class="step"><b>+2000 transactions</b><span>plus de paiements de nuit</span></div><div class="arrow">&rarr;</div><div class="step"><b>v2</b><span>7000 lignes, F1 0.8423</span></div><div class="arrow">&rarr;</div><div class="step"><b>git checkout v1 + dvc checkout</b><span>tout revient : donnees, modele, metriques</span></div></div>
+
+<h2 id="code">Le code, fichier par fichier</h2><p>Ouvre le projet dans VS Code : chaque script commence par le meme resume (ROLE / ENTREE / SORTIE / A RETENIR). Lis-les dans cet ordre, c'est l'ordre d'execution.</p><pre>dvc.yaml                    -> la description du pipeline (remplace pipeline.py du TP2)
+dvc.lock                    -> la photo des empreintes apres dvc repro (genere, ne pas editer)
+data/transactions.csv.dvc   -> le ticket : md5 + taille du CSV
+.dvc/config                 -> ou est le stockage distant (../dvc-stockage)</pre><div class="grid"><div class="card"><h3>1. <code>donnees.py</code></h3><p><b>Role :</b> Fabrique le jeu de 5000 transactions bancaires (synthetiques) avec une graine fixe.</p><p><b>Entree :</b> rien (tirage aleatoire avec la graine 7)</p><p><b>Sortie :</b> data/transactions.csv (5000 lignes, 568 fraudes)</p><p><b>A retenir :</b> Meme graine = memes donnees pour toute la promo : c'est la base de la reproductibilite.</p></div><div class="card"><h3>2. <code>src/preparer.py</code></h3><p><b>Role :</b> Etape 1 du pipeline : decoupe les donnees en apprentissage (75 %) et test (25 %).</p><p><b>Entree :</b> data/transactions.csv + params.yaml (section preparation)</p><p><b>Sortie :</b> data/prepare/train.csv et data/prepare/test.csv</p><p><b>A retenir :</b> Dans le TP3, c'est dvc.yaml qui lance ce script (dvc repro), seulement si ses dependances changent.</p></div><div class="card"><h3>3. <code>src/entrainer.py</code></h3><p><b>Role :</b> Etape 2 du pipeline : entraine une foret aleatoire sur train.csv.</p><p><b>Entree :</b> data/prepare/train.csv + params.yaml (section entrainement)</p><p><b>Sortie :</b> models/model.pkl</p><p><b>A retenir :</b> Relance par dvc repro uniquement si train.csv, ce script ou un parametre entrainement.* change.</p></div><div class="card"><h3>4. <code>src/evaluer.py</code></h3><p><b>Role :</b> Etape 3 du pipeline : mesure le modele sur le jeu de test.</p><p><b>Entree :</b> data/prepare/test.csv + models/model.pkl</p><p><b>Sortie :</b> reports/metrics.json (f1, precision, recall) + reports/confusion.png</p><p><b>A retenir :</b> metrics.json est declare 'cache: false' : il reste dans Git pour etre compare (dvc metrics diff).</p></div><div class="card"><h3>5. <code>src/journaliser.py</code></h3><p><b>Role :</b> Cree un run MLflow qui pointe vers la version EXACTE des donnees (md5 lu dans le ticket .dvc).</p><p><b>Entree :</b> params.yaml, data/transactions.csv.dvc, reports/metrics.json, dvc.lock</p><p><b>Sortie :</b> un run 'donnees-xxxxxxxx' dans l'experience tp3-dvc</p><p><b>A retenir :</b> Lien complet : tag commit (code) + tag donnees_md5 (donnees) + dvc.lock (tout le pipeline).</p></div><div class="card"><h3>6. <code>nouvelles_donnees.py</code></h3><p><b>Role :</b> Simule le mois suivant : ajoute 2000 transactions (plus de paiements de nuit) au CSV existant.</p><p><b>Entree :</b> data/transactions.csv (v1, 5000 lignes)</p><p><b>Sortie :</b> data/transactions.csv (v2, 7000 lignes, 936 fraudes)</p><p><b>A retenir :</b> Apres ce script : dvc add met a jour le ticket avec une NOUVELLE empreinte md5.</p></div></div>
+
+<h2 id="resultats">Resultats</h2>
+<div class="tablewrap"><table><thead><tr><th>Situation</th><th>Etapes relancees</th><th>F1</th></tr></thead><tbody><tr><td>dvc repro initial</td><td>preparer, entrainer, evaluer</td><td>0.8636</td></tr><tr><td>dvc repro sans changement</td><td>aucune (up to date)</td><td>0.8636</td></tr><tr><td>max_depth 12 -> 8</td><td>entrainer, evaluer (preparer ignoree)</td><td>0.8594</td></tr><tr><td>retour a 12</td><td>aucune : restaure depuis le cache</td><td>0.8636</td></tr><tr><td>donnees v2 (7000 lignes)</td><td>les trois</td><td>0.8423</td></tr></tbody></table></div>
+<br><div class="bar"><div class="lbl">v1 (5000 lignes)</div><div class="track"><div class="fill " style="width:86.4%"></div></div><div class="val">0.8636</div></div><div class="bar"><div class="lbl">max_depth 8</div><div class="track"><div class="fill alt" style="width:85.9%"></div></div><div class="val">0.8594</div></div><div class="bar"><div class="lbl">v2 (7000 lignes)</div><div class="track"><div class="fill bad" style="width:84.2%"></div></div><div class="val">0.8423</div></div><div class="bar"><div class="lbl">exp max_depth 8 (v2)</div><div class="track"><div class="fill alt" style="width:84.9%"></div></div><div class="val">0.8493</div></div><div class="bar"><div class="lbl">exp max_depth 16 (v2)</div><div class="track"><div class="fill alt" style="width:84.7%"></div></div><div class="val">0.8474</div></div>
+
+<h2 id="lecons">Ce qu'il faut retenir</h2>
+<ul class="check"><li><b>Meme donnee = meme md5 ; un octet change = empreinte totalement differente.</b> C'est la preuve exacte de la version.</li><li><b>Deux push, deux destinations</b> : <code>git push</code> (code + tickets -> GitHub) ET <code>dvc push</code> (donnees -> stockage). Oublier l'un = projet non reproductible.</li><li><b>dvc.yaml decrit, dvc repro decide</b> : seules les etapes dont une dependance a change sont relancees ; <code>dvc.lock</code> est la photo des empreintes.</li><li><b>Plus de data/ ni models/ dans .gitignore</b> : DVC ecrit ses propres .gitignore. Ne jamais faire <code>git add .</code>.</li><li><b>Metriques en cache:false</b> : petit JSON lisible dans Git, comparable avec <code>dvc metrics diff</code>.</li><li><b>Git + DVC + MLflow</b> : commit = quel code, md5 = quelles donnees, run = quels parametres et resultats.</li></ul>
+<div class="callout warn"><strong>Lecture critique : F1 0.8636 -> 0.8423</strong>Le modele v2 n'est pas forcement moins bon : le jeu de test a change (1750 lignes dont une population differente, plus de nuits). On ne compare des scores que sur le MEME jeu de test.</div>
+
+<h2 id="pieges">Pieges</h2>
+<div class="callout bad"><strong>'output is already tracked by SCM'</strong>Un fichier produit par le pipeline a ete ajoute a Git (git add .). Solution : <code>git rm --cached</code> puis <code>dvc repro</code>.</div>
+<div class="callout warn"><strong>Stockage local</strong><code>../dvc-stockage</code> est sur ta machine : un camarade qui clone verra les tickets mais ne pourra pas faire <code>dvc pull</code>. Il faut un remote partage (S3, GDrive...).</div>
+
+<h2 id="commandes">Commandes a connaitre</h2>
+<pre>dvc init ; dvc add data/transactions.csv ; git add data/*.dvc data/.gitignore
+dvc remote add -d stockage ../dvc-stockage ; dvc push ; dvc pull ; dvc status
+dvc repro ; dvc dag ; dvc params diff ; dvc metrics diff ; dvc metrics show
+git tag v1 ; git checkout v1 ; dvc checkout ; git checkout main ; dvc checkout
+dvc exp run -S entrainement.max_depth=8 ; dvc exp show</pre>
+
+<footer>5IASD - Deploiement d'IA 2026-2027 - fiche de revision generee le 7 novembre 2026.</footer>
+</main></body></html>
