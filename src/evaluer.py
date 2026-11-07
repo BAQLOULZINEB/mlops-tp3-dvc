@@ -1,4 +1,10 @@
-"""Evaluate the trained model and generate metrics and a confusion matrix."""
+"""TP3 - src/evaluer.py
+
+ROLE      : Etape 3 du pipeline : mesure le modele sur le jeu de test.
+ENTREE    : data/prepare/test.csv + models/model.pkl
+SORTIE    : reports/metrics.json (f1, precision, recall) + reports/confusion.png
+A RETENIR : metrics.json est declare 'cache: false' : il reste dans Git pour etre compare (dvc metrics diff).
+"""
 
 import json
 from pathlib import Path

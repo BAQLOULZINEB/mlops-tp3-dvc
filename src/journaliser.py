@@ -1,3 +1,11 @@
+"""TP3 - src/journaliser.py
+
+ROLE      : Cree un run MLflow qui pointe vers la version EXACTE des donnees (md5 lu dans le ticket .dvc).
+ENTREE    : params.yaml, data/transactions.csv.dvc, reports/metrics.json, dvc.lock
+SORTIE    : un run 'donnees-xxxxxxxx' dans l'experience tp3-dvc
+A RETENIR : Lien complet : tag commit (code) + tag donnees_md5 (donnees) + dvc.lock (tout le pipeline).
+"""
+
 import json
 import subprocess
 import yaml

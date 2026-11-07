@@ -1,3 +1,11 @@
+"""TP3 - nouvelles_donnees.py
+
+ROLE      : Simule le mois suivant : ajoute 2000 transactions (plus de paiements de nuit) au CSV existant.
+ENTREE    : data/transactions.csv (v1, 5000 lignes)
+SORTIE    : data/transactions.csv (v2, 7000 lignes, 936 fraudes)
+A RETENIR : Apres ce script : dvc add met a jour le ticket avec une NOUVELLE empreinte md5.
+"""
+
 import numpy as np
 import pandas as pd
 

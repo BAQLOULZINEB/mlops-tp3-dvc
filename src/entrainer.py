@@ -1,4 +1,10 @@
-"""Train the model from the prepared training dataset."""
+"""TP3 - src/entrainer.py
+
+ROLE      : Etape 2 du pipeline : entraine une foret aleatoire sur train.csv.
+ENTREE    : data/prepare/train.csv + params.yaml (section entrainement)
+SORTIE    : models/model.pkl
+A RETENIR : Relance par dvc repro uniquement si train.csv, ce script ou un parametre entrainement.* change.
+"""
 
 from pathlib import Path
 

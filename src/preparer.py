@@ -1,4 +1,10 @@
-"""Prepare reproducible train and test datasets."""
+"""TP3 - src/preparer.py
+
+ROLE      : Etape 1 du pipeline : decoupe les donnees en apprentissage (75 %) et test (25 %).
+ENTREE    : data/transactions.csv + params.yaml (section preparation)
+SORTIE    : data/prepare/train.csv et data/prepare/test.csv
+A RETENIR : Dans le TP3, c'est dvc.yaml qui lance ce script (dvc repro), seulement si ses dependances changent.
+"""
 
 from pathlib import Path
 
